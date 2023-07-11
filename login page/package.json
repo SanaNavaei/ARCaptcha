@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "fastify": "^3.29.5",
+    "fastify-static": "^4.7.0"
+  }
+}
