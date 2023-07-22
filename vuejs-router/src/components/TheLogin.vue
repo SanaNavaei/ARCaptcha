@@ -2,14 +2,14 @@
     <div class="container">
         <div class="login">
             <h1>Login</h1>
-            <form action="/login" method="post">
+            <form>
                 <div class="w-100">
                     <label for="">Username: </label>
                     <input type="text" v-model="username" id="username" name="username" required />
                 </div>
                 <div class="w-100">
                     <label for="password">Password: </label>
-                    <input type="password" v-mode="password" id="password" name="password" required />
+                    <input type="password" v-model="password" id="password" name="password" required />
                 </div>
                 <div class="w-100">
                     <input @click="LoginHandler" type="submit" id="button" value="login" />
@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     data() {
         return {
@@ -30,7 +32,23 @@ export default {
     },
 
     methods: {
-        LoginHandler() {},
+        LoginHandler(e) {
+            e.preventDefault();
+            axios
+                .post("https://arcaptcha-ato.darkube.app/signin", {
+                    username: this.username,
+                    password: this.password,
+                })
+                .then((response) => {
+                    if (response.status == 200) {
+                        const token = response.data.token;
+                        console.log(token);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.response.data.message);
+                });
+        },
     },
 };
 </script>

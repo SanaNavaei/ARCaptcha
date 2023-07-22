@@ -2,7 +2,7 @@
     <div class="container">
         <div class="login">
             <h1>Signup</h1>
-            <form action="/login" method="post">
+            <form>
                 <div class="w-100">
                     <label for="">Username: </label>
                     <input type="text" v-model="username" id="username" name="username" required />
@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     data() {
         return {
@@ -34,7 +36,25 @@ export default {
     },
 
     methods: {
-        SignupHandler() {},
+        SignupHandler(e) {
+            e.preventDefault();
+            axios
+                .post("https://arcaptcha-ato.darkube.app/signup", {
+                    username: this.username,
+                    password: this.password,
+                    confirm_password: this.password2,
+                })
+                .then((response) => {
+                    if (response.status == 200) {
+                        const token = response.data.token;
+                        localStorage.setItem(this.username, token);
+                        console.log(token);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.response.data.message);
+                });
+        },
     },
 };
 </script>
